@@ -1,0 +1,46 @@
+// {
+//     "version": "2.0.0",
+//     "tasks": [
+//       {
+//         "label": "Compile", // Метка для задачи компиляции
+//         "type": "shell", // Тип задачи - shell команда
+//         "command": "cargo", // Команда для компиляции (cargo)
+//         "args": [
+//           "build", // Аргументы cargo
+//           "--release" // Дополнительные аргументы, например, сборка release версии
+//         ],
+//         "group": {
+//           "kind": "build",
+//           "isDefault": true // Указывает что это основная задача
+//         },
+//         "problemMatcher": "$msCompile" // Обработчик ошибок компиляции
+//       },
+//       {
+//         "label": "Run BAT 1", // Метка для первой задачи запуска BAT файла
+//         "type": "shell",
+//         "command": "cmd", // Запуск BAT файла через cmd.exe
+//         "args": [
+//           "/c",
+//           "path/to/your/bat/file1.bat" // Путь к вашему BAT-файлу
+//         ],
+//         "dependsOn": ["Compile"], // Зависит от задачи Compile, запускается после успешной компиляции
+//         "group": {
+//           "kind": "test" // Группа для задачи, например test
+//         }
+//       },
+//       {
+//         "label": "Run BAT 2", // Метка для второй задачи запуска BAT файла
+//         "type": "shell",
+//         "command": "cmd",
+//         "args": [
+//           "/c",
+//           "path/to/your/bat/file2.bat"
+//         ],
+//         "dependsOn": ["Compile"],
+//         "group": {
+//           "kind": "test"
+//         }
+//       }
+  
+//     ]
+//   }
