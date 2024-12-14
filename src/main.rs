@@ -50,12 +50,14 @@ fn main() -> ! {
     // let duty=(pulse_width_0deg/servo_period)*pwm_timer.get_max_duty();
     // lookup таблица для угла поворота:
     const servo_period: i32 = 20_000;
-    const duty_0_deg: u16 = 1900;
-    const duty_90_deg: u16 = 4625;
-    const duty_180_deg: u16 = 7200;
+    const duty_0_deg: u16 = 2667;
+    const duty_90_deg: u16 = 5350;
+    const duty_180_deg: u16 = 7320;
 
     pwm_timer.enable(Channel::C1); // Включаем канал
     pwm_timer.set_period(ms(20).into_rate());
+    // pwm_timer.set_duty(Channel::C1, duty_180_deg);
+    // cortex_m::asm::delay(10_000_000);
     
     loop {
         block!(timer.wait()).unwrap();
@@ -68,11 +70,11 @@ fn main() -> ! {
         pwm_timer.set_duty(Channel::C1, duty_90_deg);
         cortex_m::asm::delay(10_000_000);        
         pwm_timer.set_duty(Channel::C1, duty_0_deg);
-        cortex_m::asm::delay(10_000_000);
+        cortex_m::asm::delay(5_000_000);
         pwm_timer.set_duty(Channel::C1, duty_90_deg);
-        cortex_m::asm::delay(10_000_000);
+        cortex_m::asm::delay(5_000_000);
         pwm_timer.set_duty(Channel::C1, duty_180_deg);
-        cortex_m::asm::delay(10_000_000);
+        cortex_m::asm::delay(5_000_000);
         pwm_timer.set_duty(Channel::C1, duty_90_deg);
         cortex_m::asm::delay(10_000_000);
         pwm_timer.set_duty(Channel::C1, duty_180_deg);
