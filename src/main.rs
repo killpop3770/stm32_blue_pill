@@ -43,19 +43,16 @@ fn main() -> ! {
     // Сервопривод работает при 50 герц, которые мы поставили на таймере TIM2
     // Частота таймера 50 герц == Период цикла шим 20 милисекунд
     // Если поставить ширину импульса на 1-2 милисекунды это изменит положение
-    let servo_period = 20_000;
-    let pulse_width_0deg = 1000; // Микросекунды (0 градусов) 2667
-    let pulse_width_90deg = 1500; // Микросекунды (90 градусов) 4000
-    let pulse_width_180deg = 2000; // Микросекунды (180 градусов) 5333
-
-    // Рассчет значений для set_duty (важно для точности!) 
-    // TODO: Использовать Decimal вместо float???
-    // TODO: Посмотреть точные значение для пульсации по градусам
-    // TODO: Какое точное значение у pwm_timer.get_max_duty(), меняется ли оно 
-    // или необходимо все сместить к float???
-    let duty_0deg = 2667; //(pulse_width_0deg/servo_period)*pwm_timer.get_max_duty();
-    let duty_90deg = 5333; //(pulse_width_90deg/servo_period)*(pwm_timer.get_max_duty() as f16);
-    let duty_180deg = 7330; //(pulse_width_180deg/servo_period)*(pwm_timer.get_max_duty() as f16);
+    
+    // const pulse_width_0deg: i32 = 1000; // Микросекунды (0 градусов) 2667
+    // const pulse_width_90deg: i32 = 1500; // Микросекунды (90 градусов) 4000
+    // const pulse_width_180deg: i32 = 2000; // Микросекунды (180 градусов) 5333
+    // let duty=(pulse_width_0deg/servo_period)*pwm_timer.get_max_duty();
+    // lookup таблица для угла поворота:
+    const servo_period: i32 = 20_000;
+    const duty_0_deg: u16 = 1900;
+    const duty_90_deg: u16 = 4625;
+    const duty_180_deg: u16 = 7200;
 
     pwm_timer.enable(Channel::C1); // Включаем канал
     pwm_timer.set_period(ms(20).into_rate());
@@ -66,11 +63,19 @@ fn main() -> ! {
         block!(timer.wait()).unwrap();
         led.set_high();
 
-        pwm_timer.set_duty(Channel::C1, duty_0deg);
+        pwm_timer.set_duty(Channel::C1, duty_0_deg);
         cortex_m::asm::delay(10_000_000);
-        pwm_timer.set_duty(Channel::C1, duty_90deg);
+        pwm_timer.set_duty(Channel::C1, duty_90_deg);
+        cortex_m::asm::delay(10_000_000);        
+        pwm_timer.set_duty(Channel::C1, duty_0_deg);
         cortex_m::asm::delay(10_000_000);
-        pwm_timer.set_duty(Channel::C1, duty_180deg);
+        pwm_timer.set_duty(Channel::C1, duty_90_deg);
+        cortex_m::asm::delay(10_000_000);
+        pwm_timer.set_duty(Channel::C1, duty_180_deg);
+        cortex_m::asm::delay(10_000_000);
+        pwm_timer.set_duty(Channel::C1, duty_90_deg);
+        cortex_m::asm::delay(10_000_000);
+        pwm_timer.set_duty(Channel::C1, duty_180_deg);
         cortex_m::asm::delay(10_000_000);
     }
 }
